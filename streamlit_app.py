@@ -68,8 +68,13 @@ def generate_content(company_name, industry, tone, topic, social_channel, target
 # -----------------------------
 # Streamlit UI
 # -----------------------------
-# Colore sfondo: #c6e9f9
-st.set_page_config(page_title="💡 Generatore di Contenuti Aziendali", page_icon="💼", layout="wide")
+st.set_page_config(
+    page_title="💡 Generatore di Contenuti Aziendali",
+    page_icon="💰",
+    layout="wide"
+)
+
+# Sfondo colore turchese chiaro
 st.markdown(
     """
     <style>
@@ -83,11 +88,14 @@ st.markdown(
 
 st.title("💡 Generatore di Contenuti Aziendali")
 
-# Immagine/logo locale
-img = Image.open("euro-banknotes-background-2458088.jpg")  # Assicurati che l'estensione corrisponda
-st.image(img, use_column_width=True)
+# Logo con emoji 💰
+st.markdown("### 💰 Sassa La Sussurratrice dei grandi brand")
 
-# Input utente con menù a tendina per alcune opzioni
+# Immagine/logo locale
+img = Image.open("euro-banknotes-background-2458088.jpg")
+st.image(img, use_container_width=True)  # aggiornato secondo il nuovo parametro
+
+# Input utente con menù a tendina
 company_name = st.text_input("Nome Azienda", "GreenTech Solutions")
 industry = st.selectbox("Settore", ["Energie rinnovabili", "Tecnologia", "Moda", "Caffetteria", "Finanza"])
 tone = st.selectbox("Tono", ["Professionale", "Motivazionale", "Amichevole", "Innovativo"])
