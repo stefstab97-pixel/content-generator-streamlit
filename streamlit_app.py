@@ -8,9 +8,9 @@ from langchain_core.prompts import ChatPromptTemplate
 chat_model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
 # -----------------------------
-# Few-shot examples
+# Few-shot examples di default
 # -----------------------------
-examples = """
+default_examples = """
 Esempi di contenuti generati per aziende famose:
 
 1. Azienda: Nike
@@ -26,9 +26,27 @@ Esempi di contenuti generati per aziende famose:
    Canale: Facebook
    Pubblico: Clienti fedeli
    Contenuto: "Scopri il tuo momento di relax con la nuova bevanda della stagione. #StarbucksMoments"
-
-Questi esempi aiutano a comprendere lo stile e il tono da generare.
 """
+
+# -----------------------------
+# Sidebar: impostazioni principali
+# -----------------------------
+st.sidebar.title("⚙️ Parametri Generali")
+company_name = st.sidebar.text_input("Nome Azienda", "GreenTech Solutions")
+industry = st.sidebar.text_input("Settore", "Energie rinnovabili")
+tone = st.sidebar.selectbox("Tono della comunicazione", ["Professionale", "Amichevole", "Motivazionale", "Ispirazionale"])
+social_channel = st.sidebar.selectbox("Canale Social", ["LinkedIn", "Facebook", "Instagram", "Twitter"])
+target_audience = st.sidebar.text_input("Pubblico Target", "Manager e professionisti nel settore green")
+length = st.sidebar.slider("Numero di paragrafi del contenuto", 1, 5, 3)
+
+# -----------------------------
+# Main area: topic e esempi personalizzati
+# -----------------------------
+st.title("💡 Generatore di Contenuti Aziendali Avanzato")
+topic = st.text_input("Argomento principale", "Importanza della sostenibilità nelle imprese")
+
+st.markdown("### 📝 Esempi di riferimento (opzionali)")
+user_examples = st.text_area("Puoi aggiungere esempi personalizzati per affinare lo stile", default_examples, height=200)
 
 # -----------------------------
 # Prompt template
@@ -39,9 +57,10 @@ prompt_template = ChatPromptTemplate.from_messages([
 Crea un contenuto pubblicitario per l'azienda {{company_name}}, settore {{industry}}, con tono {{tone}}.
 Il contenuto deve essere adatto al canale {{social_channel}} e rivolto a {{target_audience}}.
 Argomento principale: {{topic}}.
+Numero di paragrafi: {{length}}.
 
 Usa questi esempi come riferimento di stile e tono:
-{examples}
+{user_examples}
 """)
 ])
 
@@ -51,31 +70,26 @@ content_chain = prompt_template | chat_model
 # -----------------------------
 # Funzione di generazione contenuti
 # -----------------------------
-def generate_content(company_name, industry, tone, topic, social_channel, target_audience):
+def generate_content(company_name, industry, tone, topic, social_channel, target_audience, length):
     result = content_chain.invoke({
         "company_name": company_name,
         "industry": industry,
         "tone": tone,
         "topic": topic,
         "social_channel": social_channel,
-        "target_audience": target_audience
+        "target_audience": target_audience,
+        "length": length
     })
     return result.content
 
 # -----------------------------
-# Streamlit UI
+# Bottone per generare contenuto
 # -----------------------------
-st.title("💡 Generatore di Contenuti Aziendali")
-
-company_name = st.text_input("Nome Azienda", "GreenTech Solutions")
-industry = st.text_input("Settore", "Energie rinnovabili")
-tone = st.text_input("Tono", "Professionale e motivazionale")
-topic = st.text_input("Argomento principale", "Importanza della sostenibilità nelle imprese")
-social_channel = st.text_input("Canale Social", "LinkedIn")
-target_audience = st.text_input("Pubblico Target", "Manager e professionisti nel settore green")
-
 if st.button("Genera Contenuto"):
     with st.spinner("Sto generando il contenuto..."):
-        content = generate_content(company_name, industry, tone, topic, social_channel, target_audience)
+        content = generate_content(company_name, industry, tone, topic, social_channel, target_audience, length)
         st.markdown("### 📄 Contenuto Generato")
-        st.markdown(content)
+        with st.expander("Visualizza il contenuto completo"):
+            st.markdown(content)
+        # Bottone per download
+        st.download_button("💾 Scarica il contenuto", content, file_name=f"{company_name}_contenuto.txt")
