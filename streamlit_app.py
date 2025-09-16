@@ -42,7 +42,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown('<div class="custom-logo">🤖 StefanoAntiCAPITALSM BOT</div>', unsafe_allow_html=True)
+st.markdown('<div class="custom-logo">🤖 Stefano IlDistruttoreDei7Mondi</div>', unsafe_allow_html=True)
 st.title("💡 Generatore di Contenuti Aziendali")
 
 # -----------------------------
