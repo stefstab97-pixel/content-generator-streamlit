@@ -3,32 +3,27 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
 # -----------------------------
-# Streamlit: sfondo e neon-logo
+# Streamlit: sfondo e logo
 # -----------------------------
 st.markdown(
     """
     <style>
     body {
-        background: linear-gradient(135deg, #0D0E11 0%, #0D0E11 100%);
-        color: white;
+        background-color: #c6e9f9;
+        color: #0D0E11;
         font-family: 'Inter', sans-serif;
     }
-    .neon-logo {
+    .custom-logo {
         font-size: 48px;
-        color: #3AB4F2;
+        color: #0D0E11;
         text-align: center;
         margin-top: 50px;
-        text-shadow: 0 0 5px #3AB4F2, 0 0 15px #3AB4F2, 0 0 30px #3AB4F2;
-        animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-        0% { text-shadow: 0 0 5px #3AB4F2, 0 0 15px #3AB4F2; }
-        50% { text-shadow: 0 0 15px #3AB4F2, 0 0 25px #3AB4F2; }
-        100% { text-shadow: 0 0 5px #3AB4F2, 0 0 15px #3AB4F2; }
+        font-weight: 700;
+        text-shadow: 0 0 3px #0D0E11, 0 0 5px #0D0E11;
     }
     .stButton>button {
-        background-color: #3AB4F2;
-        color: #0D0E11;
+        background-color: #0D0E11;
+        color: #c6e9f9;
         font-weight: 600;
         border-radius: 10px;
         height: 45px;
@@ -36,9 +31,9 @@ st.markdown(
         border: none;
         margin-top: 10px;
     }
-    .stTextInput>div>div>input {
-        background-color: #1A1B1F;
-        color: white;
+    .stTextInput>div>div>input, .stSelectbox>div>div>div>select {
+        background-color: #e0f5fc;
+        color: #0D0E11;
         border-radius: 8px;
         height: 35px;
     }
@@ -47,7 +42,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown('<div class="neon-logo">🤖 Bot Aziendale</div>', unsafe_allow_html=True)
+st.markdown('<div class="custom-logo">🤖 StefanoAntiCAPITALSM BOT</div>', unsafe_allow_html=True)
 st.title("💡 Generatore di Contenuti Aziendali")
 
 # -----------------------------
@@ -113,10 +108,18 @@ def generate_content(company_name, industry, tone, topic, social_channel, target
 # -----------------------------
 company_name = st.text_input("Nome Azienda", "GreenTech Solutions")
 industry = st.text_input("Settore", "Energie rinnovabili")
-tone = st.text_input("Tono", "Professionale e motivazionale")
+
+# Menu a tendina
+tone = st.selectbox("Tono", ["Professionale", "Motivazionale", "Amichevole", "Istituzionale", "Ironico"])
 topic = st.text_input("Argomento principale", "Importanza della sostenibilità nelle imprese")
-social_channel = st.text_input("Canale Social", "LinkedIn")
-target_audience = st.text_input("Pubblico Target", "Manager e professionisti nel settore green")
+social_channel = st.selectbox("Canale Social", ["LinkedIn", "Facebook", "Instagram", "Twitter", "TikTok"])
+target_audience = st.selectbox("Pubblico Target", [
+    "Manager e professionisti nel settore green",
+    "Giovani startupper",
+    "Consumatori eco-consapevoli",
+    "Investitori",
+    "Pubblico generico"
+])
 
 if st.button("Genera Contenuto"):
     with st.spinner("Sto generando il contenuto..."):
