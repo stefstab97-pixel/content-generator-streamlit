@@ -1,42 +1,7 @@
 import streamlit as st
+from PIL import Image
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from PIL import Image
-import requests
-from io import BytesIO
-
-# -----------------------------
-# Streamlit: Sfondo personalizzato e logo
-# -----------------------------
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: #c6e9f9;
-        color: #0D0E11;
-        font-family: 'Inter', sans-serif;
-    }
-    .custom-logo {
-        font-size: 48px;
-        color: #0D0E11;
-        text-align: center;
-        margin-top: 20px;
-        font-weight: 700;
-        text-shadow: 0 0 3px #0D0E11, 0 0 5px #0D0E11;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Logo testuale
-st.markdown('<div class="custom-logo">💰 Sassa La Sussurratrice dei grandi brand 💰</div>', unsafe_allow_html=True)
-
-# Immagine dei soldi come logo/illustrazione
-img_url = "https://images.crushpixel.com/desktop/2458088/euro-banknotes-background.jpg"  # URL diretto all'immagine
-response = requests.get(img_url)
-img = Image.open(BytesIO(response.content))
-st.image(img, width=400)
 
 # -----------------------------
 # Inizializzazione modello
@@ -62,6 +27,8 @@ Esempi di contenuti generati per aziende famose:
    Canale: Facebook
    Pubblico: Clienti fedeli
    Contenuto: "Scopri il tuo momento di relax con la nuova bevanda della stagione. #StarbucksMoments"
+
+Questi esempi aiutano a comprendere lo stile e il tono da generare.
 """
 
 # -----------------------------
@@ -79,7 +46,9 @@ Usa questi esempi come riferimento di stile e tono:
 """)
 ])
 
+# -----------------------------
 # Catena
+# -----------------------------
 content_chain = prompt_template | chat_model
 
 # -----------------------------
@@ -99,13 +68,31 @@ def generate_content(company_name, industry, tone, topic, social_channel, target
 # -----------------------------
 # Streamlit UI
 # -----------------------------
+# Colore sfondo: #c6e9f9
+st.set_page_config(page_title="💡 Generatore di Contenuti Aziendali", page_icon="💼", layout="wide")
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #c6e9f9;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("💡 Generatore di Contenuti Aziendali")
 
+# Immagine/logo locale
+img = Image.open("euro-banknotes-background-2458088.jpg")  # Assicurati che l'estensione corrisponda
+st.image(img, use_column_width=True)
+
+# Input utente con menù a tendina per alcune opzioni
 company_name = st.text_input("Nome Azienda", "GreenTech Solutions")
-industry = st.text_input("Settore", "Energie rinnovabili")
-tone = st.selectbox("Tono", ["Professionale e motivazionale", "Amichevole", "Ironico", "Serio"])
+industry = st.selectbox("Settore", ["Energie rinnovabili", "Tecnologia", "Moda", "Caffetteria", "Finanza"])
+tone = st.selectbox("Tono", ["Professionale", "Motivazionale", "Amichevole", "Innovativo"])
 topic = st.text_input("Argomento principale", "Importanza della sostenibilità nelle imprese")
-social_channel = st.selectbox("Canale Social", ["LinkedIn", "Facebook", "Instagram", "Twitter"])
+social_channel = st.selectbox("Canale Social", ["LinkedIn", "Instagram", "Facebook", "Twitter"])
 target_audience = st.text_input("Pubblico Target", "Manager e professionisti nel settore green")
 
 if st.button("Genera Contenuto"):
