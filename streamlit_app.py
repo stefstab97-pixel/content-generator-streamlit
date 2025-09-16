@@ -1,9 +1,12 @@
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
+from PIL import Image
+import requests
+from io import BytesIO
 
 # -----------------------------
-# Streamlit: sfondo e logo
+# Streamlit: Sfondo personalizzato e logo
 # -----------------------------
 st.markdown(
     """
@@ -17,33 +20,23 @@ st.markdown(
         font-size: 48px;
         color: #0D0E11;
         text-align: center;
-        margin-top: 50px;
+        margin-top: 20px;
         font-weight: 700;
         text-shadow: 0 0 3px #0D0E11, 0 0 5px #0D0E11;
-    }
-    .stButton>button {
-        background-color: #0D0E11;
-        color: #c6e9f9;
-        font-weight: 600;
-        border-radius: 10px;
-        height: 45px;
-        width: 100%;
-        border: none;
-        margin-top: 10px;
-    }
-    .stTextInput>div>div>input, .stSelectbox>div>div>div>select {
-        background-color: #e0f5fc;
-        color: #0D0E11;
-        border-radius: 8px;
-        height: 35px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.markdown('<div class="custom-logo">🤖 Stefano IlDistruttoreDei7Mondi</div>', unsafe_allow_html=True)
-st.title("💡 Generatore di Contenuti Aziendali")
+# Logo testuale
+st.markdown('<div class="custom-logo">💰 Sassa La Sussurratrice dei grandi brand 💰</div>', unsafe_allow_html=True)
+
+# Immagine dei soldi come logo/illustrazione
+img_url = "https://images.crushpixel.com/desktop/2458088/euro-banknotes-background.jpg"  # URL diretto all'immagine
+response = requests.get(img_url)
+img = Image.open(BytesIO(response.content))
+st.image(img, width=400)
 
 # -----------------------------
 # Inizializzazione modello
@@ -104,22 +97,16 @@ def generate_content(company_name, industry, tone, topic, social_channel, target
     return result.content
 
 # -----------------------------
-# Streamlit UI: input
+# Streamlit UI
 # -----------------------------
+st.title("💡 Generatore di Contenuti Aziendali")
+
 company_name = st.text_input("Nome Azienda", "GreenTech Solutions")
 industry = st.text_input("Settore", "Energie rinnovabili")
-
-# Menu a tendina
-tone = st.selectbox("Tono", ["Professionale", "Motivazionale", "Amichevole", "Istituzionale", "Ironico"])
+tone = st.selectbox("Tono", ["Professionale e motivazionale", "Amichevole", "Ironico", "Serio"])
 topic = st.text_input("Argomento principale", "Importanza della sostenibilità nelle imprese")
-social_channel = st.selectbox("Canale Social", ["LinkedIn", "Facebook", "Instagram", "Twitter", "TikTok"])
-target_audience = st.selectbox("Pubblico Target", [
-    "Manager e professionisti nel settore green",
-    "Giovani startupper",
-    "Consumatori eco-consapevoli",
-    "Investitori",
-    "Pubblico generico"
-])
+social_channel = st.selectbox("Canale Social", ["LinkedIn", "Facebook", "Instagram", "Twitter"])
+target_audience = st.text_input("Pubblico Target", "Manager e professionisti nel settore green")
 
 if st.button("Genera Contenuto"):
     with st.spinner("Sto generando il contenuto..."):
