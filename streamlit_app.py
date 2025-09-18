@@ -6,6 +6,18 @@ from langchain_core.prompts import ChatPromptTemplate
 # -----------------------------
 # Inizializzazione modello
 # -----------------------------
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Carica variabili dal file .env
+load_dotenv()
+
+# Recupera la chiave
+api_key = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=api_key)
+
 chat_model = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
 # -----------------------------
@@ -108,3 +120,4 @@ if st.button("Genera Contenuto"):
         content = generate_content(company_name, industry, tone, topic, social_channel, target_audience)
         st.markdown("### 📄 Contenuto Generato")
         st.markdown(content)
+
